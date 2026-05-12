@@ -9,7 +9,7 @@ return [
     'allowed_origins' => array_values(array_filter(array_map(
         'trim',
              explode(',', (string) env(
-            'CORS_ALLOWED_ORIGINS',
+            'CORS_ALLOWED_ORIGINS','desirable-prosperity-production.up.railway.app',
             'http://localhost:5173'
         ))
     ))),
