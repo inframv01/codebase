@@ -1,11 +1,9 @@
 [build]
 builder = "RAILPACK"
-# package-lock.json is present, so npm ci gives deterministic installs in Railway.
-buildCommand = "npm ci && npm run build"
+buildCommand = "rm -rf node_modules/.vite && npm ci && npm run build"
 
 [deploy]
-# `serve -s` provides the SPA fallback so BrowserRouter deep links still resolve to index.html.
-startCommand = "npx --yes serve dist -s -l $PORT"
+startCommand = "npx --yes serve -s dist -l $PORT"
 healthcheckPath = "/"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
