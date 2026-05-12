@@ -1,8 +1,7 @@
 [build]
 builder = "RAILPACK"
 # Build the PHP app, then compile the Laravel Vite assets used by Blade views.
-buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction && npm ci && npm run build && php artisan optimize"
-
+buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction && php artisan optimize"
 [deploy]
 # Run migrations before the web process starts; this must stay idempotent.
 preDeployCommand = ["php artisan migrate --force"]
