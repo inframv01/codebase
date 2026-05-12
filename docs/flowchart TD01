@@ -1,0 +1,57 @@
+flowchart TD
+  subgraph Web["WEB (no API prefix)"]
+    W1[GET / → welcome view]
+  end
+
+  subgraph API["API /api/v1/"]
+    subgraph AuthGroup["prefix: /auth  ── throttle:auth"]
+      A1[POST /register]
+      A2[POST /login]
+      A3[GET  /google/redirect]
+      A4[GET  /google/callback]
+      A5[POST /forgot-password]
+      A6[POST /reset-password]
+      subgraph OTPGroup["── throttle:otp"]
+        A7[POST /otp/resend]
+        A8[POST /otp/verify]
+      end
+    end
+
+    PUB[GET /health → 200 ok]
+
+    subgraph AuthRequired["auth:sanctum + throttle:api"]
+      ME1[GET  /me]
+      ME2[PATCH /me]
+      ME3[POST /me/contact-numbers]
+      LK1[GET /lookups/atolls]
+      LK2[GET /lookups/islands]
+      LK3[GET /lookups/transport-providers]
+      LK4[GET /lookups/boats/schedules]
+      LK5[POST /quotes/preview]
+      DR1[GET  /delivery-requests]
+      DR2[POST /delivery-requests]
+      DR3[GET  /delivery-requests/:uuid]
+      DR4[POST /delivery-requests/:uuid/cancel]
+      DR5[POST /delivery-requests/:uuid/payments]
+      SA[CRUD /addresses]
+      N1[GET  /notifications]
+      N2[POST /notifications/:id/read]
+      N3[POST /notifications/read-all]
+
+      subgraph OperatorGroup["role:operator,admin + abilities:operator"]
+        OP1[CRUD /operator/atolls]
+        OP2[CRUD /operator/islands]
+        OP3[CRUD /operator/island-groups]
+        OP4[CRUD /operator/transport-providers]
+        OP5[CRUD /operator/boats]
+        OP6[CRUD /operator/boats.schedules]
+        OP7[CRUD /operator/pricing-rules]
+        OP8[GET  /operator/delivery-requests]
+        OP9[POST /operator/delivery-requests/:uuid/quote]
+        OP10[POST /operator/delivery-requests/:uuid/accept]
+        OP11[POST /operator/delivery-requests/:uuid/stage]
+        OP12[POST /operator/delivery-requests/:uuid/payments/:id/verify]
+        OP13[POST /operator/delivery-requests/:uuid/payments/:id/reject]
+      end
+    end
+  end
