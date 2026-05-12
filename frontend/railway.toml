@@ -1,5 +1,5 @@
 [build]
-builder = "NIXPACKS"
+builder = "RAILPACK"
 # package-lock.json is present, so npm ci gives deterministic installs in Railway.
 buildCommand = "npm ci && npm run build"
 

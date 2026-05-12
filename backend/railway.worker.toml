@@ -1,5 +1,5 @@
 [build]
-builder = "NIXPACKS"
+builder = "RAILPACK"
 buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction"
 
 [deploy]

@@ -1,5 +1,5 @@
 [build]
-builder = "NIXPACKS"
+builder = "RAILPACK"
 # Build the PHP app, then compile the Laravel Vite assets used by Blade views.
 buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction && npm ci && npm run build && php artisan optimize"
 
