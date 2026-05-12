@@ -133,7 +133,7 @@ src/
 
 When refactoring API calls:
 - Centralize all fetch wrappers in `src/api/` (one file per resource)
-- Use `VITE_API_URL` from environment, never hardcode domain
+- Use `VITE_API_BASE_URL` from environment, never hardcode domain. `VITE_API_URL` may be used as a legacy fallback.
 - Send `X-XSRF-TOKEN` header for POST/PUT/DELETE (Laravel Sanctum requirement)
 - Type all API responses explicitly (avoid `any`)
 - Handle errors consistently across components

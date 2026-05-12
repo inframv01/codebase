@@ -131,7 +131,7 @@ cd frontend && npm run dev  # in another terminal
 **Key environment files:**
 - `backend/.env` — Database, mail, queue config (copy from `.env.example`, then generate key)
 - `backend/boost.json` — Laravel Boost configuration (skills, MCP, agent settings)
-- `frontend/.env` — API URL when frontend is wired to backend (use `VITE_API_URL`)
+- `frontend/.env` — API URL when frontend is wired to backend (use `VITE_API_BASE_URL`, with legacy support for `VITE_API_URL`)
 
 **Test database:**
 - PostgreSQL `maldideliv_test` (config in `backend/phpunit.xml`)
@@ -172,7 +172,7 @@ cd frontend && npm run dev  # in another terminal
 
 ### Connecting Frontend to Backend API
 When frontend is wired to backend:
-1. Set `VITE_API_URL` in `frontend/.env`
+1. Set `VITE_API_BASE_URL` in `frontend/.env` (legacy `VITE_API_URL` is still supported)
 2. Create fetch wrapper in `src/api/resource.ts`
 3. Send `X-XSRF-TOKEN` header for mutations (Laravel Sanctum requirement)
 4. Use typed response wrappers for all API calls

@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const baseURL = process.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'
+const baseURL = process.env.VITE_API_BASE_URL?.trim() || process.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'
 
 export default defineConfig({
   testDir: './tests/e2e',

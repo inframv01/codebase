@@ -325,7 +325,8 @@ php artisan key:generate
 **Frontend:**
 ```bash
 # .env not required, but you can set:
-VITE_API_URL=http://localhost:8000/api/v1
+VITE_API_BASE_URL=http://localhost:8000
+# Legacy VITE_API_URL is also accepted.
 ```
 
 ## GitHub Actions Secrets

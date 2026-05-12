@@ -92,7 +92,7 @@ dist
 
 Set environment variables:
 
-- VITE_API_URL=https://YOUR_BACKEND_RAILWAY_DOMAIN/api/v1
+- VITE_API_BASE_URL=https://YOUR_BACKEND_RAILWAY_DOMAIN
 
 Because the frontend uses BrowserRouter, configure SPA fallback in Railway static hosting so unknown paths resolve to index.html.
 

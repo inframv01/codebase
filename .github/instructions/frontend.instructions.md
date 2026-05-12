@@ -34,7 +34,7 @@ applyTo: "frontend/**"
 ## API Integration (Laravel backend)
 
 The backend is not yet connected. When wiring up:
-- Base URL from `import.meta.env.VITE_API_URL` — never hardcode
+- Base URL from `import.meta.env.VITE_API_BASE_URL` — never hardcode. `VITE_API_URL` is supported as a fallback for legacy environments.
 - Centralize all API calls in `src/api/` (one file per resource, e.g. `src/api/orders.ts`)
 - Use `fetch` with typed response wrappers; only adopt a library (e.g. TanStack Query) if the codebase already uses one
 - Laravel CSRF token must be sent as `X-XSRF-TOKEN` header for mutating requests (POST/PUT/DELETE)

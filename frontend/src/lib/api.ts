@@ -1,8 +1,22 @@
 import axios from 'axios'
 import { clearStoredAuth, loadStoredAuth } from './authStorage'
 
+const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim()
+const normalizedApiBaseUrl = rawApiBaseUrl
+  ? rawApiBaseUrl.replace(/\/+$/, '').replace(/\/api(\/v\d+)?$/, '')
+  : undefined
+const legacyApiUrl = import.meta.env.VITE_API_URL?.trim()
+const normalizedLegacyApiUrl = legacyApiUrl
+  ? legacyApiUrl.replace(/\/+$/, '').replace(/\/api(\/v\d+)?$/, '')
+  : undefined
+const baseURL = normalizedApiBaseUrl
+  ? `${normalizedApiBaseUrl}/api`
+  : normalizedLegacyApiUrl
+    ? `${normalizedLegacyApiUrl}/api`
+    : '/api'
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api/v1',
+  baseURL,
   headers: {
     Accept: 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
