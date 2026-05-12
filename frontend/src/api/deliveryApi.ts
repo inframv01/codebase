@@ -1,5 +1,5 @@
 import { api } from '../lib/api'
-import type { ApiMessageResponse, DeliveryRequest, Payment, ServiceType } from '../types'
+import type { ApiMessageResponse, DeliveryRequest, PaginatedResponse, Payment, ServiceType } from '../types'
 
 export interface CreateDeliveryPayload {
   type: ServiceType
@@ -67,8 +67,13 @@ export function createDeliveryFormData(payload: CreateDeliveryPayload): FormData
 
 export const deliveryApi = {
   async listDeliveryRequests(): Promise<DeliveryRequest[]> {
-    const { data } = await api.get<DeliveryRequest[]>('/delivery-requests')
-    return data
+    const { data } = await api.get<PaginatedResponse<DeliveryRequest> | DeliveryRequest[]>('/delivery-requests')
+
+    if (Array.isArray(data)) {
+      return data
+    }
+
+    return Array.isArray(data.data) ? data.data : []
   },
 
   async createDeliveryRequest(payload: CreateDeliveryPayload): Promise<DeliveryRequest> {

@@ -10,10 +10,10 @@ const normalizedLegacyApiUrl = legacyApiUrl
   ? legacyApiUrl.replace(/\/+$/, '').replace(/\/api(\/v\d+)?$/, '')
   : undefined
 const baseURL = normalizedApiBaseUrl
-  ? `${normalizedApiBaseUrl}/api`
+  ? `${normalizedApiBaseUrl}/api/v1`
   : normalizedLegacyApiUrl
-    ? `${normalizedLegacyApiUrl}/api`
-    : '/api'
+    ? `${normalizedLegacyApiUrl}/api/v1`
+    : '/api/v1'
 
 export const api = axios.create({
   baseURL,
