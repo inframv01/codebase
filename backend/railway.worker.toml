@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction"
+
+[deploy]
+# Queue workers do not need a healthcheck; Railway only needs the process to stay alive.
+startCommand = "php artisan queue:work --sleep=3 --tries=3 --max-time=3600"
+restartPolicyType = "always"

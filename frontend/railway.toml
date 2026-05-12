@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+# package-lock.json is present, so npm ci gives deterministic installs in Railway.
+buildCommand = "npm ci && npm run build"
+
+[deploy]
+# `serve -s` provides the SPA fallback so BrowserRouter deep links still resolve to index.html.
+startCommand = "npx --yes serve dist -s -l $PORT"
+healthcheckPath = "/"
+healthcheckTimeout = 60
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[environments.pr.deploy]
+restartPolicyType = "never"

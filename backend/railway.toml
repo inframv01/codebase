@@ -1,0 +1,21 @@
+[build]
+builder = "NIXPACKS"
+# Build the PHP app, then compile the Laravel Vite assets used by Blade views.
+buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction && npm ci && npm run build && php artisan optimize"
+
+[deploy]
+# Run migrations before the web process starts; this must stay idempotent.
+preDeployCommand = ["php artisan migrate --force"]
+startCommand = "php artisan serve --host=0.0.0.0 --port=$PORT"
+healthcheckPath = "/up"
+healthcheckTimeout = 120
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[environments.production.deploy]
+# Production inherits the base deploy behavior.
+
+[environments.pr.deploy]
+# Preview services should not restart endlessly or run migrations by default.
+restartPolicyType = "never"
+preDeployCommand = []
