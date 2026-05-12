@@ -1,5 +1,6 @@
 import { api } from '../lib/api'
-import type { ApiMessageResponse, DeliveryRequest, PaginatedResponse, Payment, ServiceType } from '../types'
+import { asArray, asMessage, asObject } from './responseGuards'
+import type { ApiMessageResponse, DeliveryRequest, Payment, ServiceType } from '../types'
 
 export interface CreateDeliveryPayload {
   type: ServiceType
@@ -67,30 +68,30 @@ export function createDeliveryFormData(payload: CreateDeliveryPayload): FormData
 
 export const deliveryApi = {
   async listDeliveryRequests(): Promise<DeliveryRequest[]> {
-    const { data } = await api.get<PaginatedResponse<DeliveryRequest> | DeliveryRequest[]>('/delivery-requests')
-
-    if (Array.isArray(data)) {
-      return data
-    }
-
-    return Array.isArray(data.data) ? data.data : []
+    const { data } = await api.get<unknown>('/delivery-requests')
+    return asArray<DeliveryRequest>(data)
   },
 
   async createDeliveryRequest(payload: CreateDeliveryPayload): Promise<DeliveryRequest> {
-    const { data } = await api.post<DeliveryRequest>('/delivery-requests', createDeliveryFormData(payload))
-    return data
+    const { data } = await api.post<unknown>('/delivery-requests', createDeliveryFormData(payload))
+    return asObject<DeliveryRequest>(data)
   },
 
   async getDeliveryRequest(uuid: string): Promise<DeliveryRequest> {
-    const { data } = await api.get<DeliveryRequest>(`/delivery-requests/${uuid}`)
-    return data
+    const { data } = await api.get<unknown>(`/delivery-requests/${uuid}`)
+    return asObject<DeliveryRequest>(data)
   },
 
   async cancelDeliveryRequest(uuid: string): Promise<ApiMessageResponse & { delivery_request: DeliveryRequest }> {
-    const { data } = await api.post<ApiMessageResponse & { delivery_request: DeliveryRequest }>(
+    const { data } = await api.post<unknown>(
       `/delivery-requests/${uuid}/cancel`,
     )
-    return data
+    const response = asObject<ApiMessageResponse & { delivery_request?: DeliveryRequest }>(data)
+
+    return {
+      ...asMessage(response),
+      delivery_request: asObject<DeliveryRequest>(response.delivery_request),
+    }
   },
 
   async uploadPaymentSlip(uuid: string, amountCents: number, slip: File): Promise<ApiMessageResponse & { payment: Payment }> {
@@ -98,10 +99,15 @@ export const deliveryApi = {
     form.append('amount_cents', String(amountCents))
     form.append('slip', slip)
 
-    const { data } = await api.post<ApiMessageResponse & { payment: Payment }>(
+    const { data } = await api.post<unknown>(
       `/delivery-requests/${uuid}/payments`,
       form,
     )
-    return data
+    const response = asObject<ApiMessageResponse & { payment?: Payment }>(data)
+
+    return {
+      ...asMessage(response),
+      payment: asObject<Payment>(response.payment),
+    }
   },
 }

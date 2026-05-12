@@ -1,4 +1,5 @@
 import { api } from '../lib/api'
+import { asArray, asMessage, asObject, asPaginated } from './responseGuards'
 import type {
   ApiMessageResponse,
   Atoll,
@@ -38,13 +39,13 @@ export interface PricingRulePayload {
 
 export const operatorApi = {
   async listResource<TItem extends OperatorItem>(resource: OperatorResource): Promise<TItem[]> {
-    const { data } = await api.get<TItem[]>(`/operator/${resource}`)
-    return data
+    const { data } = await api.get<unknown>(`/operator/${resource}`)
+    return asArray<TItem>(data)
   },
 
   async createResource<TItem extends OperatorItem>(resource: OperatorResource, payload: OperatorPayload): Promise<TItem> {
-    const { data } = await api.post<TItem>(`/operator/${resource}`, payload)
-    return data
+    const { data } = await api.post<unknown>(`/operator/${resource}`, payload)
+    return asObject<TItem>(data)
   },
 
   async updateResource<TItem extends OperatorItem>(
@@ -52,8 +53,8 @@ export const operatorApi = {
     id: number,
     payload: OperatorPayload,
   ): Promise<TItem> {
-    const { data } = await api.patch<TItem>(`/operator/${resource}/${id}`, payload)
-    return 'data' in Object(data) ? (data as unknown as { data: TItem }).data : data
+    const { data } = await api.patch<unknown>(`/operator/${resource}/${id}`, payload)
+    return asObject<TItem>(data)
   },
 
   async deleteResource(resource: OperatorResource, id: number): Promise<void> {
@@ -61,18 +62,18 @@ export const operatorApi = {
   },
 
   async listBoatSchedules(boatId: number): Promise<BoatSchedule[]> {
-    const { data } = await api.get<BoatSchedule[]>(`/operator/boats/${boatId}/schedules`)
-    return data
+    const { data } = await api.get<unknown>(`/operator/boats/${boatId}/schedules`)
+    return asArray<BoatSchedule>(data)
   },
 
   async createBoatSchedule(boatId: number, payload: OperatorPayload): Promise<BoatSchedule> {
-    const { data } = await api.post<BoatSchedule>(`/operator/boats/${boatId}/schedules`, payload)
-    return data
+    const { data } = await api.post<unknown>(`/operator/boats/${boatId}/schedules`, payload)
+    return asObject<BoatSchedule>(data)
   },
 
   async updateBoatSchedule(boatId: number, scheduleId: number, payload: OperatorPayload): Promise<BoatSchedule> {
-    const { data } = await api.patch<BoatSchedule>(`/operator/boats/${boatId}/schedules/${scheduleId}`, payload)
-    return data
+    const { data } = await api.patch<unknown>(`/operator/boats/${boatId}/schedules/${scheduleId}`, payload)
+    return asObject<BoatSchedule>(data)
   },
 
   async deleteBoatSchedule(boatId: number, scheduleId: number): Promise<void> {
@@ -82,46 +83,66 @@ export const operatorApi = {
   async listOperatorDeliveryRequests(
     filters: OperatorDeliveryFilters,
   ): Promise<PaginatedResponse<DeliveryRequest>> {
-    const { data } = await api.get<PaginatedResponse<DeliveryRequest>>('/operator/delivery-requests', {
+    const { data } = await api.get<unknown>('/operator/delivery-requests', {
       params: filters,
     })
-    return data
+    return asPaginated<DeliveryRequest>(data)
   },
 
   async quoteRequest(
     uuid: string,
     payload: { variable_cost_cents: number; total_cost_cents: number; notes?: string },
   ): Promise<ApiMessageResponse & { delivery_request: DeliveryRequest }> {
-    const { data } = await api.post<ApiMessageResponse & { delivery_request: DeliveryRequest }>(
+    const { data } = await api.post<unknown>(
       `/operator/delivery-requests/${uuid}/quote`,
       payload,
     )
-    return data
+    const response = asObject<ApiMessageResponse & { delivery_request?: DeliveryRequest }>(data)
+
+    return {
+      ...asMessage(response),
+      delivery_request: asObject<DeliveryRequest>(response.delivery_request),
+    }
   },
 
   async acceptRequest(uuid: string): Promise<ApiMessageResponse & { delivery_request: DeliveryRequest }> {
-    const { data } = await api.post<ApiMessageResponse & { delivery_request: DeliveryRequest }>(
+    const { data } = await api.post<unknown>(
       `/operator/delivery-requests/${uuid}/accept`,
     )
-    return data
+    const response = asObject<ApiMessageResponse & { delivery_request?: DeliveryRequest }>(data)
+
+    return {
+      ...asMessage(response),
+      delivery_request: asObject<DeliveryRequest>(response.delivery_request),
+    }
   },
 
   async stageRequest(
     uuid: string,
     payload: { stage: DeliveryStage; notes?: string },
   ): Promise<ApiMessageResponse & { delivery_request: DeliveryRequest }> {
-    const { data } = await api.post<ApiMessageResponse & { delivery_request: DeliveryRequest }>(
+    const { data } = await api.post<unknown>(
       `/operator/delivery-requests/${uuid}/stage`,
       payload,
     )
-    return data
+    const response = asObject<ApiMessageResponse & { delivery_request?: DeliveryRequest }>(data)
+
+    return {
+      ...asMessage(response),
+      delivery_request: asObject<DeliveryRequest>(response.delivery_request),
+    }
   },
 
   async verifyPayment(uuid: string, paymentUuid: string): Promise<ApiMessageResponse & { payment: Payment }> {
-    const { data } = await api.post<ApiMessageResponse & { payment: Payment }>(
+    const { data } = await api.post<unknown>(
       `/operator/delivery-requests/${uuid}/payments/${paymentUuid}/verify`,
     )
-    return data
+    const response = asObject<ApiMessageResponse & { payment?: Payment }>(data)
+
+    return {
+      ...asMessage(response),
+      payment: asObject<Payment>(response.payment),
+    }
   },
 
   async rejectPayment(
@@ -129,10 +150,15 @@ export const operatorApi = {
     paymentUuid: string,
     rejectionReason?: string,
   ): Promise<ApiMessageResponse & { payment: Payment }> {
-    const { data } = await api.post<ApiMessageResponse & { payment: Payment }>(
+    const { data } = await api.post<unknown>(
       `/operator/delivery-requests/${uuid}/payments/${paymentUuid}/reject`,
       { rejection_reason: rejectionReason },
     )
-    return data
+    const response = asObject<ApiMessageResponse & { payment?: Payment }>(data)
+
+    return {
+      ...asMessage(response),
+      payment: asObject<Payment>(response.payment),
+    }
   },
 }

@@ -1,4 +1,5 @@
 import { api } from '../lib/api'
+import { asArray, asObject } from './responseGuards'
 import type { AddressPurpose, SavedAddress } from '../types'
 
 export interface SavedAddressPayload {
@@ -12,18 +13,18 @@ export interface SavedAddressPayload {
 
 export const addressApi = {
   async listAddresses(): Promise<SavedAddress[]> {
-    const { data } = await api.get<SavedAddress[]>('/addresses')
-    return data
+    const { data } = await api.get<unknown>('/addresses')
+    return asArray<SavedAddress>(data)
   },
 
   async createAddress(payload: SavedAddressPayload): Promise<SavedAddress> {
-    const { data } = await api.post<SavedAddress>('/addresses', payload)
-    return data
+    const { data } = await api.post<unknown>('/addresses', payload)
+    return asObject<SavedAddress>(data)
   },
 
   async updateAddress(id: number, payload: SavedAddressPayload): Promise<SavedAddress> {
-    const { data } = await api.patch<SavedAddress>(`/addresses/${id}`, payload)
-    return data
+    const { data } = await api.patch<unknown>(`/addresses/${id}`, payload)
+    return asObject<SavedAddress>(data)
   },
 
   async deleteAddress(id: number): Promise<void> {
