@@ -38,10 +38,11 @@ class AppServiceProvider extends ServiceProvider
             $key = $config['key'] ?? null;
 
             if (! is_string($key) || $key === '') {
-                throw new InvalidArgumentException('Brevo mailer requires BREVO_API_KEY to be configured.');
+                throw new InvalidArgumentException('Brevo mailer requires a valid API key to be configured.');
             }
 
-            return Transport::fromDsn('brevo+api://'.rawurlencode($key).'@default');
+            // Using rawurlencode guarantees special characters in keys don't break the DSN string
+            return Transport::fromDsn('brevo+api://' . rawurlencode($key) . '@default');
         });
 
         Model::preventLazyLoading(! app()->isProduction());
