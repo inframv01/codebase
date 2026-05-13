@@ -44,7 +44,7 @@ export function AppShell() {
         <div className="mx-auto flex h-14 max-w-screen-lg items-center justify-between gap-3 px-4 md:px-6 lg:px-8">
           <Link to="/" className="flex min-h-11 items-center gap-2 font-bold text-slate-950">
             <Package className="h-5 w-5 text-teal-700" aria-hidden="true" />
-            Maldiv Delivery
+            Fast-delivery
           </Link>
           <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
             {links.map((link) => (
