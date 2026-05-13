@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             IslandSeeder::class,
             TransportProviderSeeder::class,
             PricingRuleSeeder::class,
+            OperatorUserSeeder::class,
         ]);
 
         User::firstOrCreate([
