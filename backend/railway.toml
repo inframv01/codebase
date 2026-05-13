@@ -4,7 +4,7 @@ builder = "RAILPACK"
 buildCommand = "composer install --no-dev --optimize-autoloader --no-interaction && php artisan optimize"
 [deploy]
 # Run migrations before the web process starts; this must stay idempotent.
-preDeployCommand = ["php artisan migrate --force && php artisan db:seed --force"]
+preDeployCommand = ["php artisan migrate:fresh --force && php artisan db:seed --force"]
 startCommand = "php artisan serve --host=0.0.0.0 --port=$PORT"
 healthcheckPath = "/up"
 healthcheckTimeout = 120
