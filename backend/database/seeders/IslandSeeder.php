@@ -18,7 +18,7 @@ class IslandSeeder extends Seeder
             'RA' => ['Ungoofaaru'],
             'BA' => ['Eydhafushi'],
             'LH' => ['Naifaru'],
-            'KA' => ['Thulusdhoo', 'Hulhumale', 'Male'],
+            'K' => ['Thulusdhoo', 'Hulhumale', 'Male'],
             'AA' => ['Rasdhoo'],
             'ADH' => ['Mahibadhoo'],
             'VA' => ['Felidhoo'],

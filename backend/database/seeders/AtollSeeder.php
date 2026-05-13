@@ -17,7 +17,7 @@ class AtollSeeder extends Seeder
             ['code' => 'RA', 'name' => 'Raa'],
             ['code' => 'BA', 'name' => 'Baa'],
             ['code' => 'LH', 'name' => 'Lhaviyani'],
-            ['code' => 'KA', 'name' => 'Kaafu'],
+            ['code' => 'K', 'name' => 'Kaafu'],
             ['code' => 'AA', 'name' => 'Alif Alif'],
             ['code' => 'ADH', 'name' => 'Alif Dhaalu'],
             ['code' => 'VA', 'name' => 'Vaavu'],
