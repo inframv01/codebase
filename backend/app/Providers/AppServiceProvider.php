@@ -13,8 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
+use Symfony\Component\Mailer\Transport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +34,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Mail::extend('brevo', function (array $config) {
+            $key = $config['key'] ?? null;
+
+            if (! is_string($key) || $key === '') {
+                throw new InvalidArgumentException('Brevo mailer requires BREVO_API_KEY to be configured.');
+            }
+
+            return Transport::fromDsn('brevo+api://'.rawurlencode($key).'@default');
+        });
+
         Model::preventLazyLoading(! app()->isProduction());
         JsonResource::withoutWrapping();
         Gate::policy(DeliveryRequest::class, DeliveryRequestPolicy::class);

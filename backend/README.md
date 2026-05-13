@@ -32,7 +32,10 @@ DB_DATABASE=dbmaldelivery
 DB_USERNAME=postgres
 DB_PASSWORD=secret
 
-MAIL_MAILER=log
+MAIL_MAILER=brevo
+BREVO_API_KEY=your-brevo-transactional-api-key
+MAIL_FROM_ADDRESS=no-reply@example.com
+MAIL_FROM_NAME=${APP_NAME}
 
 FILESYSTEM_DISK=local
 UPLOADS_DISK_DRIVER=local
@@ -47,6 +50,8 @@ GOOGLE_REDIRECT_URI=${APP_URL}/api/v1/auth/google/callback
 ```
 
 For production, point the `uploads` disk to S3-compatible storage by setting `UPLOADS_DISK_DRIVER=s3` and the corresponding bucket credentials.
+
+OTP email is sent through Laravel notifications using the Brevo transactional API mailer. In Brevo, create an SMTP & API transactional API key, set it as `BREVO_API_KEY`, and use a verified sender address for `MAIL_FROM_ADDRESS`.
 
 ## Run
 
