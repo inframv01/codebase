@@ -5,16 +5,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    
     'allowed_origins' => array_values(array_filter(array_map(
         'trim',
-             explode(',', (string) env(
+        explode(',', (string) env(
             'CORS_ALLOWED_ORIGINS',
-            'http://localhost:5173','https://hallu.app/'
+            'http://localhost:5173,https://hallu.app'
         ))
     ))),
-
-
 
     'allowed_origins_patterns' => [],
 
